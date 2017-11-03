@@ -22,4 +22,7 @@ Most functionallity can be accessed through `make` targets:
 For further parameter specification take a look at the `Makefile` variables before changing the code.
 
 #### Note
-In order to use this code you need to paste you Google Service Account credendials in the `auth.json` file.
+In order to use this code you need to paste you Google Service Account credendials in the `auth.json` file. You can ignore the local modifications of this file with:
+```sh
+git update-index --assume-unchanged auth.json
+```
