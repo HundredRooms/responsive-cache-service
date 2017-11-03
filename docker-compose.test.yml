@@ -1,0 +1,21 @@
+version: '2'
+services:
+  cachete.api:
+    ports:
+      - :14080:8080
+    environment:
+      - HR_ENV=TEST
+    build:
+      args:
+        - INCLUDE_TEST=1
+  tensorflow:
+    build:
+      context: training
+      args:
+        - INCLUDE_TEST=1
+    ports:
+      - :14888:8888
+    volumes:
+      - ./training:/opt
+    environment:
+      - HR_ENV=DEV

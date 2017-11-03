@@ -1,0 +1,25 @@
+FROM tensorflow/tensorflow:1.0.1
+
+WORKDIR /opt
+
+RUN apt-get update -y && apt-get install -y libtcmalloc-minimal4
+RUN curl https://sdk.cloud.google.com > installer.sh && bash installer.sh --disable-prompts && rm installer.sh
+
+ENV PYTHONPATH=/opt
+ENV PATH=$PATH:/root/google-cloud-sdk/bin
+ENV LD_PRELOAD=/usr/lib/libtcmalloc_minimal.so.4
+
+
+COPY auth.json /credentials/auth.json
+RUN ls /credentials
+COPY training/requirements.txt requirements.txt
+COPY training/requirements-test.txt requirements-test.txt
+
+RUN gcloud components update
+RUN gcloud auth activate-service-account --key-file /credentials/auth.json
+ENV GOOGLE_APPLICATION_CREDENTIALS=/credentials/auth.json
+
+ENV PYTHONUNBUFFERED=1
+
+ARG INCLUDE_TEST=0
+RUN if [ $INCLUDE_TEST -eq 1 ]; then pip install -r /opt/requirements-test.txt; else pip install -r /opt/requirements.txt; fi

@@ -1,0 +1,16 @@
+version: '2'
+services:
+  cachete.api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    command: gunicorn cache.server:app -c settings_gunicorn.py
+    volumes:
+      - ./api:/opt
+    networks:
+      - service-grp-net
+
+
+networks:
+  service-grp-net:
+    external: true

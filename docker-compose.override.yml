@@ -1,0 +1,33 @@
+version: '2'
+services:
+  cachete.api:
+    ports:
+      - :14080:8080
+    environment:
+      - HR_ENV=DEV
+      - POSTGRES_NAME=datarooms_db
+      - POSTGRES_USER=datarooms_user
+      - POSTGRES_PASS=n4vwNJkhudgqyXKp7dEPcwwqcNwdCyUm
+      - POSTGRES_HOST=35.189.248.28
+    networks:
+      - cachete-net
+
+  tensorflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.training
+    ports:
+      - :14888:8888
+    volumes:
+      - ./training:/opt
+      - ./input_files:/input_files
+    environment:
+      - HR_ENV=DEV
+
+  redis:
+    image: redis:3-alpine
+    networks:
+     - cachete-net
+
+networks:
+  cachete-net: {}

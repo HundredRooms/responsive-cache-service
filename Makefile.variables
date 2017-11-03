@@ -1,0 +1,46 @@
+SHELL := /bin/bash
+ifeq (${env},)
+	ymls := -f docker-compose.yml -f docker-compose.override.yml
+else
+	ymls := -f docker-compose.yml -f docker-compose.${env}.yml
+endif
+
+test_ymls := -f docker-compose.yml -f docker-compose.test.yml
+
+file-clean := clean_input_files.csv
+path-files := input_files/
+remote-export := gs://hr-tensorflow
+
+file-train-default := responsive_train_v1.csv
+file-test-default := responsive_test_v1.csv
+output-path-default := output
+
+raw-input-file ?= regressor_aggregate_1k.csv
+config-file := $(shell if [ ${config-file} ]; then echo "-c ${config-file}"; fi)
+regions := $(shell if [ ${regions} ]; then echo ${regions}; else echo us-central1; fi)
+
+job-prefix := anonimous_job_
+train-steps ?= 5
+job-config ?= job_config.yml
+job-dir ?= $(remote-export)/output
+
+file-train-cloud ?= $(remote-export)$(path-files)$(file-train-default)
+file-test-cloud ?= $(remote-export)$(path-files)$(file-test-default)
+output-path-cloud ?= $(job-dir)
+
+tensorboard-cloud: output-path ?= $(output-path-cloud)
+
+# Apply defaults
+file-train ?= $(file-train-default)
+file-test ?= $(file-test-default)
+output-path ?= $(output-path-default)
+train-env ?= python
+ifeq (${train-env},'python')
+	train-var := train-python
+endif
+ifeq (${train-env},'local')
+	train-var := train-local
+endif
+ifeq (${train-env},'cloud')
+	train-var := train-cloud
+endif

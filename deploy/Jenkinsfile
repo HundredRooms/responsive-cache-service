@@ -1,0 +1,5 @@
+@Library("servicePipeline") _
+servicePipelineAnsible {
+    name = "cachete"
+    dockerpath = "api/"
+}

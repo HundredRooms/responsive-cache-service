@@ -1,0 +1,28 @@
+trainingInput:
+  scaleTier: STANDARD_1
+  hyperparameters:
+    hyperparameterMetricTag: auc
+    goal: MAXIMIZE
+    maxTrials: 15
+    maxParallelTrials: 2
+    params:
+    - parameterName: hidden1
+      type: INTEGER
+      minValue: 10
+      maxValue: 100
+      scaleType: UNIT_LINEAR_SCALE
+    - parameterName: hidden2
+      type: INTEGER
+      minValue: 10
+      maxValue: 150
+      scaleType: UNIT_LINEAR_SCALE
+    - parameterName: ones_bias
+      type: INTEGER
+      minValue: 0
+      maxValue: 50
+      scaleType: UNIT_LINEAR_SCALE
+    - parameterName: bool_th
+      type: DOUBLE
+      minValue: 0
+      maxValue: 1
+      scaleType: UNIT_LINEAR_SCALE

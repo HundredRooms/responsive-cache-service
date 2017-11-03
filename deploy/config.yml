@@ -1,0 +1,57 @@
+config:
+  demo:
+    env:
+      - name: REDIS_DSN
+        value: redis-{{ team }} 6379 0
+    deploy:
+      resources:
+        requests:
+          memory: "62Mi"
+          cpu: "150m"
+        limits:
+          memory: "200Mi"
+          cpu: 1
+    job:
+      resources:
+        requests:
+          memory: "52Mi"
+          cpu: "500m"
+        limits:
+          memory: "1024Mi"
+          cpu: 1
+  common:
+    args: ['gunicorn', 'cache.server:app', '-c', 'settings_gunicorn.py']
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+  env:
+  - name: HR_ENV
+    valueFrom:
+      secretKeyRef:
+        name: common-secret
+        key: hr_env
+  - name: POSTGRES_HOST
+    valueFrom:
+      secretKeyRef:
+        name: common-secret
+        key: postgresql_db_host
+  - name: POSTGRES_USER
+    valueFrom:
+      secretKeyRef:
+        name: cachete-service-secret
+        key: db_user
+  - name: POSTGRES_PASS
+    valueFrom:
+      secretKeyRef:
+        name: cachete-service-secret
+        key: db_pass
+  - name: POSTGRES_NAME
+    valueFrom:
+      secretKeyRef:
+        name: cachete-service-secret
+        key: db_name
+  - name: POSTGRES_PORT
+    valueFrom:
+      secretKeyRef:
+        name: cachete-service-secret
+        key: db_port

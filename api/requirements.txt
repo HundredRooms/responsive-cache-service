@@ -1,0 +1,8 @@
+aiohttp==1.1.6
+aiohttp_cors==0.4.0
+gunicorn==19.4.5
+raven==5.18.0
+oauth2client==3.0.0
+redis==2.10.5
+aiopg==0.13.0
+psycopg2==2.6.1
